@@ -95,11 +95,11 @@ Firebase Authentication은 사용자 인증 시스템을 쉽게 구현할 수 �
 
 ### Flutter에서의 사용법
 
-1. **필요한 패키지 설치**
+1. **필요한 패키지 설치 (flutter --version 3.27.1 기준)**
    ```yaml
    dependencies:
-     firebase_core: ^x.x.x
-     firebase_auth: ^x.x.x
+     firebase_core: ^3.9.0
+     firebase_auth: ^5.3.4
    ```
 
 2. **Firebase 초기화**
