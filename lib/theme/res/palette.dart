@@ -6,8 +6,8 @@ abstract class Palette {
   static Color blue2 = const Color(0xFFE6EBFF);
   static Color blue3 = const Color(0xFFAAB9FF);
   static Color subBlue = const Color(0xFF6F87FF);
-  static Color cherryBlue = const Color(0xFF5471FF);
-  static Color blue = const Color(0xFF0064FF);
+  static Color cherryGreen = const Color(0xFFC4E464);
+  static Color green = const Color(0xFFA8C551);
 
   /// Accent colors
   static Color red = const Color(0xFFF25555);

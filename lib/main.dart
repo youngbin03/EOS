@@ -1,125 +1,79 @@
+import 'package:eos_advance_login/screens/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:eos_advance_login/screens/login_screen.dart';
+import 'package:eos_advance_login/theme/light_theme.dart';
+import 'package:eos_advance_login/theme/foundation/app_theme.dart';
+
+// TODO: [과제 1-1] Firebase 초기화 코드 구현
+/*
+ * Firebase 설정 및 초기화 과제
+ * 
+ * 1. Firebase 프로젝트 설정하기:
+ *    - Firebase 콘솔(https://console.firebase.google.com)에서 새 프로젝트 생성
+ *    - Flutter 앱을 Firebase에 등록 (Android/iOS 설정 필요)
+ *    - 필요한 구성 파일 다운로드 및 배치:
+ *      > Android: google-services.json → android/app/
+ *      > iOS: GoogleService-Info.plist → ios/Runner/
+ * 
+ * 2. 필요한 패키지 설치하기:
+ *    flutter pub add firebase_core firebase_auth
+ * 
+ * 3. Firebase 초기화 구현하기:
+ *    - main() 함수를 async로 변경
+ *    - WidgetsFlutterBinding.ensureInitialized() 호출
+ *    - await Firebase.initializeApp() 호출
+ *    
+ *    예시:
+ *    void main() async {
+ *      WidgetsFlutterBinding.ensureInitialized();
+ *      await Firebase.initializeApp();
+ *      runApp(const MyApp());
+ *    }
+ */
 
 void main() {
+  // TODO: Firebase 초기화 코드 여기에 작성
+
   runApp(const MyApp());
 }
 
+/// 애플리케이션의 루트 위젯
+/// - 앱의 전체 테마 및 초기 화면을 설정합니다.
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final AppTheme theme = LightTheme();
+
+    // TODO: [과제 1-2] 로그인 상태에 따른 화면 분기 처리
+    /*
+     * 인증 상태 관리 과제
+     * 
+     * 사용자의 로그인 상태에 따라 적절한 화면을 보여주는 기능을 구현하세요.
+     * 
+     * 구현 방법:
+     * 1. currentUser를 활용한 로그인 유지:
+     *    - FirebaseAuth.instance.currentUser != null 확인
+     *    - 앱 시작 시 이전 로그인 세션이 유효한지 확인
+     *    - 유효하면 자동으로 HomeScreen으로 이동
+     * 
+     * 2. 조건부 라우팅 구현하기:
+     *    - 로그인 상태: HomeScreen 표시
+     *    - 로그아웃 상태: LoginScreen 표시
+     * 
+     * 참고: 아래 MaterialApp의 home 속성을 수정하여 StreamBuilder를 반환하도록 변경
+     */
+
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'EOS Advance Login',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: theme.color.primary),
         useMaterial3: true,
+        fontFamily: 'Pretendard', // 프리텐다드 폰트 기본 적용
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      home: const LoginScreen(), // TODO: 로그인 상태에 따라 화면 분기 처리
     );
   }
 }

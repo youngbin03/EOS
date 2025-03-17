@@ -22,7 +22,7 @@ class LightTheme implements AppTheme {
     inactive: Palette.blue2,
     inactiveContainer: Palette.lightGrey1,
     onInactiveContainer: Palette.white,
-    primary: Palette.cherryBlue, // 메인 컬러를 blue로 설정
+    primary: Palette.green, // 메인 컬러를 blue로 설정
     onPrimary: Palette.white,
     secondary: Palette.subBlue,
     onSecondary: Palette.white,

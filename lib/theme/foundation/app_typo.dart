@@ -12,7 +12,9 @@ class AppTypo {
   /// Font Weight
   late FontWeight light = typo.light;
   late FontWeight regular = typo.regular;
+  late FontWeight medium = typo.medium;
   late FontWeight semiBold = typo.semiBold;
+  late FontWeight bold = typo.bold;
 
   /// Font Color
   final Color fontColor;
