@@ -1,8 +1,13 @@
+import 'package:eos_advance_login/firebase_options.dart';
 import 'package:eos_advance_login/screens/home_screen.dart';
+import 'package:eos_advance_login/service/auth_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:eos_advance_login/screens/login_screen.dart';
 import 'package:eos_advance_login/theme/light_theme.dart';
 import 'package:eos_advance_login/theme/foundation/app_theme.dart';
+import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 // TODO: [과제 1-1] Firebase 초기화 코드 구현
 /*
@@ -31,10 +36,27 @@ import 'package:eos_advance_login/theme/foundation/app_theme.dart';
  *    }
  */
 
-void main() {
-  // TODO: Firebase 초기화 코드 여기에 작성
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
+  // Firebase 초기화 수정
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform, // 필요시 주석 해제
+    );
+    print('Firebase 초기화 성공');
+  } catch (e) {
+    print('Firebase 초기화 오류: $e');
+  }
+
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => AuthService()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 /// 애플리케이션의 루트 위젯
@@ -73,7 +95,26 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Pretendard', // 프리텐다드 폰트 기본 적용
       ),
-      home: const LoginScreen(), // TODO: 로그인 상태에 따라 화면 분기 처리
+      home: StreamBuilder<User?>(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            // 인증 상태 확인 중일 때 로딩 표시
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          // 로그인된 유저가 있으면 HomeScreen, 없으면 LoginScreen
+          if (snapshot.hasData) {
+            return const HomeScreen();
+          } else {
+            return const LoginScreen();
+          }
+        },
+      ),
     );
   }
 }

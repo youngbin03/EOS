@@ -1,8 +1,11 @@
+import 'package:eos_advance_login/screens/home_screen.dart';
+import 'package:eos_advance_login/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:eos_advance_login/theme/res/palette.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:eos_advance_login/theme/light_theme.dart';
 import 'package:eos_advance_login/theme/foundation/app_theme.dart';
+import 'package:provider/provider.dart';
 
 /// 로그인 화면 - 이메일 로그인과 소셜 로그인 기능을 제공합니다.
 class LoginScreen extends StatefulWidget {
@@ -29,101 +32,103 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      // 화면의 빈 공간 터치 시 키보드 닫기
-      onTap: () => FocusScope.of(context).unfocus(),
-      child: Scaffold(
-        backgroundColor: theme.color.surface,
-        resizeToAvoidBottomInset: false,
-        body: SafeArea(
-          child: Column(
-            children: [
-              // 1. 메인 콘텐츠 영역 (스크롤 가능)
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: ClampingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      // EOS 로고 표시
-                      Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.only(top: 40, bottom: 24),
-                        child: Image.asset(
-                          'assets/images/eos_logo.png',
-                          width: 360,
-                          height: 144,
+    return Consumer<AuthService>(builder: (context, authService, child) {
+      return GestureDetector(
+        // 화면의 빈 공간 터치 시 키보드 닫기
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Scaffold(
+          backgroundColor: theme.color.surface,
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Column(
+              children: [
+                // 1. 메인 콘텐츠 영역 (스크롤 가능)
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
+                    child: Column(
+                      children: [
+                        // EOS 로고 표시
+                        Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.only(top: 40, bottom: 24),
+                          child: Image.asset(
+                            'assets/images/eos_logo.png',
+                            width: 360,
+                            height: 144,
+                          ),
                         ),
-                      ),
 
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 이메일 입력 필드
-                            _buildTextField(
-                              controller: _emailController,
-                              labelText: '이메일',
-                              prefixIcon: Icons.email_outlined,
-                              keyboardType: TextInputType.emailAddress,
-                            ),
-
-                            const SizedBox(height: 16),
-
-                            // 비밀번호 입력 필드
-                            _buildTextField(
-                              controller: _passwordController,
-                              labelText: '비밀번호',
-                              prefixIcon: Icons.lock_outline,
-                              obscureText: !_isPasswordVisible,
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility_off
-                                      : Icons.visibility,
-                                  color: theme.color.subtext,
-                                ),
-                                onPressed: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
-                                },
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 24),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // 이메일 입력 필드
+                              _buildTextField(
+                                controller: _emailController,
+                                labelText: '이메일',
+                                prefixIcon: Icons.email_outlined,
+                                keyboardType: TextInputType.emailAddress,
                               ),
-                            ),
 
-                            const SizedBox(height: 24),
+                              const SizedBox(height: 16),
 
-                            // 로그인 버튼
-                            _buildButton(
-                              text: '로그인',
-                              onPressed: () => _handleEmailLogin(context),
-                              backgroundColor: theme.color.primary,
-                              textColor: theme.color.onPrimary,
-                            ),
+                              // 비밀번호 입력 필드
+                              _buildTextField(
+                                controller: _passwordController,
+                                labelText: '비밀번호',
+                                prefixIcon: Icons.lock_outline,
+                                obscureText: !_isPasswordVisible,
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _isPasswordVisible
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: theme.color.subtext,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _isPasswordVisible = !_isPasswordVisible;
+                                    });
+                                  },
+                                ),
+                              ),
 
-                            const SizedBox(height: 16),
+                              const SizedBox(height: 24),
 
-                            // 비밀번호 찾기 & 회원가입 링크
-                            _buildAccountActions(),
-                          ],
+                              // 로그인 버튼
+                              _buildButton(
+                                text: '로그인',
+                                onPressed: () => _handleEmailLogin(context),
+                                backgroundColor: theme.color.primary,
+                                textColor: theme.color.onPrimary,
+                              ),
+
+                              const SizedBox(height: 16),
+
+                              // 비밀번호 찾기 & 회원가입 링크
+                              _buildAccountActions(),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
 
-              // 2. 소셜 로그인 영역 - 고정 위치에 배치
-              Material(
-                elevation: 0,
-                color: theme.color.surface,
-                child: _buildSocialLoginSection(),
-              ),
-            ],
+                // 2. 소셜 로그인 영역 - 고정 위치에 배치
+                Material(
+                  elevation: 0,
+                  color: theme.color.surface,
+                  child: _buildSocialLoginSection(),
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    });
   }
 
   /// 재사용 가능한 텍스트 필드 위젯
@@ -281,6 +286,19 @@ class _LoginScreenState extends State<LoginScreen> {
              *      > invalid-email: 유효하지 않은 이메일 형식
              *    - 성공 시 자동 로그인 처리
              */
+            Provider.of<AuthService>(context, listen: false).signUp(
+              email: _emailController.text,
+              password: _passwordController.text,
+              onSuccess: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                );
+              },
+              onError: (err) {
+                _showLoginMessage(context, '이메일');
+              },
+            );
           },
           child: Text(
             '회원가입',
@@ -402,27 +420,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// 이메일 로그인 처리 메서드
   void _handleEmailLogin(BuildContext context) {
-    // TODO: [과제 2-1] Firebase Auth를 사용한 이메일 로그인 구현
-    /*
-     * 이메일/비밀번호 로그인 구현 과제
-     * 
-     * 구현 단계:
-     * 1. 입력값 유효성 검사
-     *    - 이메일 형식: RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email)
-     *    - 비밀번호 검증: password.length >= 6
-     * 
-     * 2. Firebase 로그인 요청 전송
-     *    - FirebaseAuth.instance.signInWithEmailAndPassword() 메서드 사용
-     *    - 로그인 성공 시 HomeScreen으로 자동 이동 (authStateChanges 사용)
-     *    - 주요 오류 코드 처리:
-     *      > user-not-found: 등록되지 않은 이메일
-     *      > wrong-password: 잘못된 비밀번호
-     *      > invalid-email: 유효하지 않은 이메일 형식
-     *      > user-disabled: 비활성화된 계정
-     *    - 오류 메시지를 SnackBar로 사용자에게 표시
-     */
-
-    // 입력값 검증 (현재 코드는 유지)
+    // 입력값이 비어있는지 검사
     if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('이메일과 비밀번호를 모두 입력해주세요.')),
@@ -430,8 +428,45 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // 테스트용 로그인 메시지 (실제 구현 시 제거)
-    _showLoginMessage(context, '이메일');
+    // 이메일 형식 검사
+    final bool isEmailValid = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+        .hasMatch(_emailController.text);
+    if (!isEmailValid) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('유효한 이메일 형식이 아닙니다.')),
+      );
+      return;
+    }
+
+    // 비밀번호 길이 검사
+    if (_passwordController.text.length < 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('비밀번호는 6자 이상이어야 합니다.')),
+      );
+      return;
+    }
+
+    // Firebase 로그인 요청
+    Provider.of<AuthService>(context, listen: false).signIn(
+      email: _emailController.text,
+      password: _passwordController.text,
+      onSuccess: () {
+        // 로그인 성공 시 처리
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('로그인 성공!')),
+        );
+      },
+      onError: (err) {
+        // 로그인 실패 시 오류 메시지 표시
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('로그인 실패: $err')),
+        );
+      },
+    );
   }
 
   /// 카카오 로그인 처리 메서드

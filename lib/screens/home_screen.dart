@@ -1,3 +1,5 @@
+import 'package:eos_advance_login/screens/login_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:eos_advance_login/theme/light_theme.dart';
 import 'package:eos_advance_login/theme/foundation/app_theme.dart';
@@ -64,6 +66,44 @@ class HomeScreen extends StatelessWidget {
              * - 사용자 정보가 없는 경우 대체 텍스트 표시
              */
 
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+              margin: const EdgeInsets.all(32),
+              decoration: BoxDecoration(
+                color: theme.color.background.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: theme.color.primary, width: 1),
+              ),
+              child: Column(
+                children: [
+                  Text(
+                    '환영합니다!',
+                    style: theme.typo.body1.copyWith(
+                      color: theme.color.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.person,
+                        size: 20,
+                        color: theme.color.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        FirebaseAuth.instance.currentUser?.email ?? '로그인 필요',
+                        style: theme.typo.body1.copyWith(
+                          color: theme.color.text,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
             // 추가 정보 메시지
             Padding(
               padding: const EdgeInsets.all(24),
@@ -107,7 +147,7 @@ class HomeScreen extends StatelessWidget {
   }
 
   // 로그아웃 처리 메서드
-  void _handleLogout(BuildContext context) {
+  void _handleLogout(BuildContext context) async {
     // TODO: [과제 3-2] Firebase Auth를 사용한 로그아웃 구현
     /*
      * 로그아웃 기능 구현 과제
@@ -128,5 +168,16 @@ class HomeScreen extends StatelessWidget {
      *    - Navigator.of(context).pushAndRemoveUntil()을 사용하여
      *      화면 스택을 비우고 로그인 화면으로 이동
      */
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('로그아웃 중 오류가 발생했습니다: $e')),
+      );
+    }
   }
 }
