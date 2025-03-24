@@ -477,8 +477,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
   /// 구글 로그인 처리 메서드
   void _handleGoogleLogin(BuildContext context) {
-    // 구글 로그인 로직 구현 위치
-    _showLoginMessage(context, '구글');
+    // 로딩 상태 표시
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    // 구글 로그인 요청
+    Provider.of<AuthService>(context, listen: false).signInWithGoogle(
+      onSuccess: () {
+        // 로딩 다이얼로그 닫기
+        Navigator.pop(context);
+
+        // 홈 화면으로 이동
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+        );
+
+        // 성공 메시지
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('구글 로그인 성공!')),
+        );
+      },
+      onError: (err) {
+        // 로딩 다이얼로그 닫기
+        Navigator.pop(context);
+
+        // 오류 메시지 표시
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('구글 로그인 실패: $err')),
+        );
+      },
+    );
   }
 
   /// 애플 로그인 처리 메서드

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService extends ChangeNotifier {
   User? currentUser() {
@@ -95,5 +96,67 @@ class AuthService extends ChangeNotifier {
 
   void signOut() async {
     // 로그아웃
+  }
+
+  // Google 로그인 기능
+  Future<void> signInWithGoogle({
+    required Function() onSuccess,
+    required Function(String err) onError,
+  }) async {
+    try {
+      // Google 로그인 과정 시작
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      // 사용자가 로그인 과정을 취소한 경우
+      if (googleUser == null) {
+        onError('구글 로그인이 취소되었습니다.');
+        return;
+      }
+
+      // 인증 정보 얻기
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      // 구글 OAuth 자격 증명 생성
+      final OAuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      // Firebase에 구글 자격 증명으로 로그인
+      await FirebaseAuth.instance.signInWithCredential(credential);
+
+      // 로그인 성공
+      onSuccess();
+      notifyListeners();
+    } catch (e) {
+      if (e is FirebaseAuthException) {
+        switch (e.code) {
+          case 'account-exists-with-different-credential':
+            onError('이미 다른 방법으로 가입된 계정입니다.');
+            break;
+          case 'invalid-credential':
+            onError('잘못된 인증 정보입니다.');
+            break;
+          case 'operation-not-allowed':
+            onError('구글 로그인이 활성화되지 않았습니다. 관리자에게 문의하세요.');
+            break;
+          case 'user-disabled':
+            onError('사용자 계정이 비활성화되었습니다.');
+            break;
+          case 'user-not-found':
+            onError('사용자 계정이 존재하지 않습니다.');
+            break;
+          case 'network-request-failed':
+            onError('네트워크 연결에 실패했습니다. 인터넷 연결을 확인해주세요.');
+            break;
+          default:
+            onError('구글 로그인 중 오류가 발생했습니다: ${e.code}');
+            break;
+        }
+      } else {
+        onError('구글 로그인 중 예상치 못한 오류가 발생했습니다: ${e.toString()}');
+      }
+    }
   }
 }
