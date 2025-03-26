@@ -113,23 +113,29 @@ class AuthService extends ChangeNotifier {
         return;
       }
 
-      // 인증 정보 얻기
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
+      try {
+        // 인증 정보 얻기
+        final GoogleSignInAuthentication googleAuth =
+            await googleUser.authentication;
 
-      // 구글 OAuth 자격 증명 생성
-      final OAuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+        // 구글 OAuth 자격 증명 생성
+        final OAuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleAuth.accessToken,
+          idToken: googleAuth.idToken,
+        );
 
-      // Firebase에 구글 자격 증명으로 로그인
-      await FirebaseAuth.instance.signInWithCredential(credential);
+        // Firebase에 구글 자격 증명으로 로그인
+        await FirebaseAuth.instance.signInWithCredential(credential);
 
-      // 로그인 성공
-      onSuccess();
-      notifyListeners();
+        // 로그인 성공
+        onSuccess();
+        notifyListeners();
+      } catch (authError) {
+        print('구글 인증 단계 오류: $authError');
+        onError('구글 계정 인증 중 오류가 발생했습니다.');
+      }
     } catch (e) {
+      print('구글 로그인 오류: $e');
       if (e is FirebaseAuthException) {
         switch (e.code) {
           case 'account-exists-with-different-credential':
