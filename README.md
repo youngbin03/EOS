@@ -1,131 +1,176 @@
-# Week 2: Firebase 인증 구현 프로젝트
+# 📦 Week 3: Firebase 연동 로그인 구현하기 (Flutter)
 
-이 프로젝트는 Flutter와 Firebase Authentication을 활용하여 사용자 인증 시스템을 구현하는 과제입니다.
+---
 
 ## 📝 과제 개요
+이번 주 과제에서는 Flutter 앱에서 **Firebase Authentication**을 활용하여 아래 기능들을 구현합니다:
 
-### 과제 1: Firebase 설정 및 인증 상태 관리
-1. **Firebase 초기화 코드 구현**
-   - Firebase 프로젝트 설정 및 Flutter 앱 연결
-   - 필요한 구성 파일 설치 (google-services.json, GoogleService-Info.plist)
-   - Firebase 초기화 코드 구현
+- 비밀번호 재설정
+- 구글 로그인
+- 카카오 로그인
 
-2. **로그인 상태에 따른 화면 분기 처리**
-   - FirebaseAuth.authStateChanges()를 활용한 인증 상태 모니터링
-   - 로그인 상태에 따라 적절한 화면 표시 (로그인/홈 화면)
-   - currentUser를 활용한 로그인 세션 유지 기능
+사용자는 다양한 방법으로 앱에 로그인할 수 있으며, Firebase를 통해 인증 상태를 관리할 수 있습니다.
 
-### 과제 2: 사용자 인증 구현
-1. **이메일/비밀번호 로그인 구현**
-   - 입력값 유효성 검사 (이메일 형식, 비밀번호 길이)
-   - Firebase Auth를 사용한 로그인 기능 구현
-   - 오류 상황 처리 및 피드백 제공
+---
 
-2. **비밀번호 재설정 기능 구현**
-   - 이메일 입력 다이얼로그 구현
-   - Firebase의 sendPasswordResetEmail() 메서드 활용
-   - 성공/실패 상황 처리
+## 🎯 학습 목표
 
-3. **회원가입 기능 구현**
-   - 회원가입 양식 구현 (이메일, 비밀번호, 비밀번호 확인)
-   - 입력값 유효성 검사
-   - createUserWithEmailAndPassword() 메서드를 활용한 계정 생성
+- Firebase Authentication을 활용한 비밀번호 재설정 기능 구현
+- Google 및 Kakao 소셜 로그인 기능 구현
+- Flutter에서 외부 인증 공급자와의 연동 이해
+- 사용자 경험을 고려한 인증 UI 설계
 
-### 과제 3: 인증 후 기능 구현
-1. **현재 로그인한 사용자 정보 표시**
-   - FirebaseAuth.instance.currentUser 활용
-   - 사용자 이메일 등 정보 화면에 표시
+---
 
-2. **로그아웃 기능 구현**
-   - FirebaseAuth.instance.signOut() 메서드 활용
-   - 로그아웃 후 로그인 화면으로 이동
+## 📋 과제 상세 내용
 
-## 🚀 프로젝트 실행 방법
+### 1️⃣ 비밀번호 재설정 기능 구현
+**기능 설명**: 사용자가 비밀번호를 잊었을 때 이메일을 통해 재설정 메일을 받을 수 있게 합니다.
 
-### 사전 요구사항
-- Flutter SDK (3.4.3 이상)
-- Android Studio 또는 VS Code
+#### 구현 단계:
+1. 이메일 입력 다이얼로그 구현
+   - `AlertDialog` 또는 `SimpleDialog` 사용
+   - `TextEditingController`로 입력값 관리
+
+2. 비밀번호 재설정 요청 처리
+   - `FirebaseAuth.instance.sendPasswordResetEmail()` 사용
+   - 이메일 형식 유효성 검증 포함
+   - 요청 성공/실패에 따른 사용자 피드백 제공
+
+3. 오류 처리
+   - 존재하지 않는 사용자 이메일 등 예외 처리
+
+---
+
+### 2️⃣ 구글 로그인 기능 구현
+**기능 설명**: 사용자가 Google 계정으로 앱에 로그인할 수 있게 합니다.
+
+#### 구현 단계:
+1. Google 로그인 요청
+   - `GoogleSignIn().signIn()` 호출
+   - 사용자 계정 선택 및 권한 동의 처리
+
+2. 인증 정보 획득
+   - `googleUser.authentication` 호출 → `accessToken`, `idToken` 획득
+
+3. Firebase 인증 연결
+   - `GoogleAuthProvider.credential()`로 `OAuthCredential` 생성
+   - `FirebaseAuth.instance.signInWithCredential()` 호출로 로그인 완료
+
+4. 성공/실패 처리
+   - 성공 시: `onSuccess()` 콜백 호출
+   - 실패 시: 오류 유형에 따라 메시지 표시
+
+---
+
+### 3️⃣ 카카오 로그인 기능 구현
+**기능 설명**: 사용자가 Kakao 계정으로 앱에 로그인할 수 있게 합니다.
+
+#### 구현 단계:
+1. 카카오 SDK 초기화
+   - `KakaoSdk.init()` 호출 (`main.dart` 또는 로그인 시점)
+
+2. 로그인 요청 및 토큰 획득
+   - `UserApi.instance.loginWithKakaoAccount()` 사용
+   - 로그인 성공 시 토큰 확인
+
+3. Firebase Functions 호출
+   - 카카오 액세스 토큰을 Firebase 커스텀 토큰으로 교환하는 HTTP 요청
+   - 서버가 Firebase 커스텀 토큰을 발급
+
+4. Firebase 인증
+   - `FirebaseAuth.instance.signInWithCustomToken()` 호출
+
+5. 성공/실패 처리
+   - 성공 시: `onSuccess()` 콜백 호출
+   - 실패 시: 오류에 따른 메시지 제공
+
+#### ✅ 예시 함수
+```dart
+void signInWithKakao() async {
+  bool isInstalled = await isKakaoTalkInstalled();
+  OAuthToken token = isInstalled
+    ? await UserApi.instance.loginWithKakaoTalk()
+    : await UserApi.instance.loginWithKakaoAccount();
+
+  final response = await http.get(
+    Uri.https('kapi.kakao.com', '/v2/user/me'),
+    headers: { HttpHeaders.authorizationHeader: 'Bearer \${token.accessToken}' },
+  );
+  final profileInfo = json.decode(response.body);
+  setState(() { _loginPlatform = LoginPlatform.kakao; });
+}
+```
+
+```dart
+void signOut() async {
+  if (_loginPlatform == LoginPlatform.kakao) {
+    await UserApi.instance.logout();
+  }
+  setState(() { _loginPlatform = LoginPlatform.none; });
+}
+```
+
+---
+
+## 🚀 시작하기
+
+### 🔧 사전 요구사항
+- Flutter SDK (최신 버전)
 - Firebase 계정
+- Kakao 개발자 계정
+- Google Cloud Platform 계정
 
-### 설치 및 실행 단계
+### 💻 설치 방법
 
-1. **프로젝트 클론**
-   ```bash
-   git clone https://github.com/your-username/eos_advance_login.git
-   cd eos_advance_login
-   ```
+1. 저장소 클론:
+```bash
+git clone [your-repo-url]
+```
 
-2. **의존성 패키지 설치**
-   ```bash
-   flutter pub get
-   ```
+2. 의존성 설치:
+```bash
+flutter pub get
+```
 
-3. **Firebase 설정**
-   - [Firebase 콘솔](https://console.firebase.google.com)에서 새 프로젝트 생성
-   - Flutter 앱 등록 (Android/iOS)
-   - 구성 파일 다운로드 및 적절한 위치에 배치:
-     - Android: `android/app/google-services.json`
-     - iOS: `ios/Runner/GoogleService-Info.plist`
+3. Firebase 설정 파일 추가:
+- `firebase_options.dart` → `lib/`에 위치시킴
 
-4. **앱 실행**
-   ```bash
-   flutter run
-   ```
+4. 카카오 및 구글 키 설정:
+- `main.dart`에서 SDK 초기화 및 앱 키 설정 확인
 
-## 🔥 Firebase Authentication 소개
+5. 앱 실행:
+```bash
+flutter run
+```
 
-Firebase Authentication은 사용자 인증 시스템을 쉽게 구현할 수 있게 해주는 서비스입니다.
+---
 
-### 주요 기능
-- **다양한 인증 방식 지원**
-  - 이메일/비밀번호
-  - 소셜 로그인 (Google, Facebook, Twitter, Apple)
-  - 전화번호 인증
-  - 익명 로그인
+## 🧪 테스트 및 디버깅
 
-- **인증 상태 관리**
-  - 로그인 상태 유지
-  - 세션 관리
-  - 계정 연동
+### 🔹 비밀번호 재설정 테스트
+- 유효한 이메일 입력 후 → 재설정 메일 수신 확인
+- 잘못된 이메일 입력 시 → 오류 메시지 확인
 
-- **보안 기능**
-  - 비밀번호 해싱
-  - 이메일 인증
-  - 비밀번호 재설정
+### 🔹 구글 로그인 테스트
+- 구글 계정 선택 → 로그인 성공 여부 확인
+- 실패 시 오류 피드백 확인
 
-### Flutter에서의 사용법
+### 🔹 카카오 로그인 테스트
+- 카카오톡 설치/미설치 환경 테스트
+- 로그인 성공 및 실패 케이스별 메시지 확인
 
-1. **필요한 패키지 설치 (flutter --version 3.27.1 기준)**
-   ```yaml
-   dependencies:
-     firebase_core: ^3.9.0
-     firebase_auth: ^5.3.4
-   ```
+---
 
-2. **Firebase 초기화**
-   ```dart
-   await Firebase.initializeApp();
-   ```
+## 📚 참고 자료
+- [Firebase Authentication 문서](https://firebase.google.com/docs/auth)
+- [카카오 개발자 문서](https://developers.kakao.com/docs/latest/ko/kakaologin/flutter)
+- [Google Sign-In 문서](https://developers.google.com/identity/sign-in/flutter)
+- [Flutter Provider 패키지](https://pub.dev/packages/provider)
 
-3. **로그인 예시**
-   ```dart
-   try {
-     await FirebaseAuth.instance.signInWithEmailAndPassword(
-       email: email,
-       password: password,
-     );
-   } catch (e) {
-     // 오류 처리
-   }
-   ```
+---
 
-4. **인증 상태 모니터링**
-   ```dart
-   FirebaseAuth.instance.authStateChanges().listen((User? user) {
-     if (user == null) {
-       // 로그아웃 상태
-     } else {
-       // 로그인 상태
-     }
-   });
-   ```
+## 📄 라이센스
+이 프로젝트는 MIT 라이센스를 따릅니다. 자세한 내용은 LICENSE 파일을 참조하세요.
+
+---

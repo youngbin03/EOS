@@ -98,71 +98,63 @@ class AuthService extends ChangeNotifier {
     // 로그아웃
   }
 
-  // Google 로그인 기능
+  // TODO: [과제 1-2] Google 로그인 및 Firebase 연동 메서드 구현
+  /*
+   * Google 로그인 및 Firebase 연동 메서드
+   *
+   * 구현 단계:
+   * 1. GoogleSignIn 인스턴스 생성 및 로그인 요청
+   *    - GoogleSignIn().signIn() 호출
+   *    - 사용자 계정 선택 및 권한 동의 과정 처리
+   *
+   * 2. 인증 정보 획득
+   *    - googleUser.authentication 호출하여 accessToken과 idToken 획득
+   *
+   * 3. Firebase 인증 정보 생성
+   *    - GoogleAuthProvider.credential()로 OAuthCredential 생성
+   *    - accessToken과 idToken 전달
+   *
+   * 4. Firebase 인증 완료
+   *    - FirebaseAuth.instance.signInWithCredential() 호출
+   *
+   * 5. 성공/실패 처리
+   *    - 성공 시 onSuccess 콜백 호출
+   *    - 실패 시 오류 내용에 따라 구분하여 onError 콜백 호출
+   */
   Future<void> signInWithGoogle({
     required Function() onSuccess,
     required Function(String err) onError,
   }) async {
-    try {
-      // Google 로그인 과정 시작
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    // 여기에 구글 로그인 로직을 구현하세요
+  }
 
-      // 사용자가 로그인 과정을 취소한 경우
-      if (googleUser == null) {
-        onError('구글 로그인이 취소되었습니다.');
-        return;
-      }
-
-      try {
-        // 인증 정보 얻기
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        // 구글 OAuth 자격 증명 생성
-        final OAuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        // Firebase에 구글 자격 증명으로 로그인
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-        // 로그인 성공
-        onSuccess();
-        notifyListeners();
-      } catch (authError) {
-        print('구글 인증 단계 오류: $authError');
-        onError('구글 계정 인증 중 오류가 발생했습니다.');
-      }
-    } catch (e) {
-      print('구글 로그인 오류: $e');
-      if (e is FirebaseAuthException) {
-        switch (e.code) {
-          case 'account-exists-with-different-credential':
-            onError('이미 다른 방법으로 가입된 계정입니다.');
-            break;
-          case 'invalid-credential':
-            onError('잘못된 인증 정보입니다.');
-            break;
-          case 'operation-not-allowed':
-            onError('구글 로그인이 활성화되지 않았습니다. 관리자에게 문의하세요.');
-            break;
-          case 'user-disabled':
-            onError('사용자 계정이 비활성화되었습니다.');
-            break;
-          case 'user-not-found':
-            onError('사용자 계정이 존재하지 않습니다.');
-            break;
-          case 'network-request-failed':
-            onError('네트워크 연결에 실패했습니다. 인터넷 연결을 확인해주세요.');
-            break;
-          default:
-            onError('구글 로그인 중 오류가 발생했습니다: ${e.code}');
-            break;
-        }
-      } else {
-        onError('구글 로그인 중 예상치 못한 오류가 발생했습니다: ${e.toString()}');
-      }
-    }
+  // TODO: [과제 2-2] 카카오 로그인 및 Firebase 연동 메서드 구현
+  /*
+   * 카카오 로그인 및 Firebase 연동 메서드
+   *
+   * 구현 단계:
+   * 1. 카카오 SDK 초기화
+   *    - KakaoSdk.init() 호출 (main.dart에서 초기화 또는 여기서)
+   *
+   * 2. 카카오 로그인 요청 및 토큰 획득
+   *    - UserApi.instance.loginWithKakaoAccount() 사용
+   *    - 토큰 발급 확인
+   *
+   * 3. Firebase Functions 호출하여 커스텀 토큰 획득
+   *    - 카카오 액세스 토큰을 Firebase 커스텀 토큰으로 교환하는 HTTP 요청
+   *    - 서버는 토큰 검증 후 Firebase 커스텀 토큰 발행
+   *
+   * 4. Firebase 인증
+   *    - FirebaseAuth.instance.signInWithCustomToken() 호출
+   *
+   * 5. 성공/실패 처리
+   *    - 성공 시 onSuccess 콜백 호출
+   *    - 실패 시 오류 내용에 따라 구분하여 onError 콜백 호출
+   */
+  Future<void> signInWithKakao({
+    required Function() onSuccess,
+    required Function(String err) onError,
+  }) async {
+    // 여기에 카카오 로그인 로직을 구현하세요
   }
 }
