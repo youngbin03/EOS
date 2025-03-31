@@ -1,9 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:flutter/foundation.dart';
-import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
 
 class AuthService extends ChangeNotifier {
   User? currentUser() {
@@ -102,133 +99,62 @@ class AuthService extends ChangeNotifier {
   }
 
   // TODO: [과제 1-2] Google 로그인 및 Firebase 연동 메서드 구현
+  /*
+   * Google 로그인 및 Firebase 연동 메서드
+   *
+   * 구현 단계:
+   * 1. GoogleSignIn 인스턴스 생성 및 로그인 요청
+   *    - GoogleSignIn().signIn() 호출
+   *    - 사용자 계정 선택 및 권한 동의 과정 처리
+   *
+   * 2. 인증 정보 획득
+   *    - googleUser.authentication 호출하여 accessToken과 idToken 획득
+   *
+   * 3. Firebase 인증 정보 생성
+   *    - GoogleAuthProvider.credential()로 OAuthCredential 생성
+   *    - accessToken과 idToken 전달
+   *
+   * 4. Firebase 인증 완료
+   *    - FirebaseAuth.instance.signInWithCredential() 호출
+   *
+   * 5. 성공/실패 처리
+   *    - 성공 시 onSuccess 콜백 호출
+   *    - 실패 시 오류 내용에 따라 구분하여 onError 콜백 호출
+   */
   Future<void> signInWithGoogle({
     required Function() onSuccess,
     required Function(String err) onError,
   }) async {
-    try {
-      // 1. GoogleSignIn 인스턴스 생성 및 로그인 요청
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      // 사용자가 로그인 과정을 취소한 경우
-      if (googleUser == null) {
-        onError('구글 로그인이 취소되었습니다.');
-        return;
-      }
-
-      try {
-        // 2. 인증 정보 획득
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-
-        // 3. Firebase 인증 정보 생성
-        final credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-
-        // 4. Firebase 인증 완료
-        await FirebaseAuth.instance.signInWithCredential(credential);
-
-        // 5. 성공 처리
-        onSuccess();
-        notifyListeners(); // 상태 변경 알림
-      } catch (authError) {
-        print('구글 인증 오류: $authError');
-        onError('구글 계정 인증 중 오류가 발생했습니다.');
-      }
-    } catch (e) {
-      print('구글 로그인 오류: $e');
-      onError('구글 로그인 중 오류가 발생했습니다: ${e.toString()}');
-    }
+    // 여기에 구글 로그인 로직을 구현하세요
   }
 
   // TODO: [과제 2-2] 카카오 로그인 및 Firebase 연동 메서드 구현
+  /*
+   * 카카오 로그인 및 Firebase 연동 메서드
+   *
+   * 구현 단계:
+   * 1. 카카오 SDK 초기화
+   *    - KakaoSdk.init() 호출 (main.dart에서 초기화 또는 여기서)
+   *
+   * 2. 카카오 로그인 요청 및 토큰 획득
+   *    - UserApi.instance.loginWithKakaoAccount() 사용
+   *    - 토큰 발급 확인
+   *
+   * 3. Firebase Functions 호출하여 커스텀 토큰 획득
+   *    - 카카오 액세스 토큰을 Firebase 커스텀 토큰으로 교환하는 HTTP 요청
+   *    - 서버는 토큰 검증 후 Firebase 커스텀 토큰 발행
+   *
+   * 4. Firebase 인증
+   *    - FirebaseAuth.instance.signInWithCustomToken() 호출
+   *
+   * 5. 성공/실패 처리
+   *    - 성공 시 onSuccess 콜백 호출
+   *    - 실패 시 오류 내용에 따라 구분하여 onError 콜백 호출
+   */
   Future<void> signInWithKakao({
     required Function() onSuccess,
     required Function(String err) onError,
   }) async {
-    try {
-      // 1. 카카오톡 설치 여부 확인 및 로그인 진행
-      late kakao.OAuthToken token;
-
-      // 카카오톡 앱이 설치되어 있는지 확인
-      if (await kakao.isKakaoTalkInstalled()) {
-        // 카카오톡 앱으로 로그인 시도
-        try {
-          token = await kakao.UserApi.instance.loginWithKakaoTalk();
-          print('카카오톡 앱으로 로그인 성공');
-        } catch (error) {
-          // 앱 로그인 실패 시 계정으로 로그인 시도
-          print('카카오톡 앱 로그인 실패, 계정으로 시도: $error');
-          token = await kakao.UserApi.instance.loginWithKakaoAccount();
-        }
-      } else {
-        // 카카오톡 앱이 설치되어 있지 않은 경우 계정으로 로그인 시도
-        print('카카오톡 미설치, 계정으로 로그인 시도');
-        token = await kakao.UserApi.instance.loginWithKakaoAccount();
-      }
-
-      // 2. 토큰 검증
-      if (token.accessToken.isEmpty) {
-        onError('카카오 로그인 토큰 발급 실패');
-        return;
-      }
-
-      // 3. 카카오 사용자 정보 가져오기
-      kakao.User kakaoUser = await kakao.UserApi.instance.me();
-      print('카카오 사용자 정보 획득: ${kakaoUser.id}');
-
-      // 4. Firebase OAuthProvider 생성 및 인증
-      try {
-        // OIDCProvider로 카카오 인증 정보 생성
-        final provider = OAuthProvider("oidc.kakao");
-        final credential = provider.credential(
-          idToken: token.idToken, // OIDC 인증을 위한 ID 토큰
-          accessToken: token.accessToken, // 접근 토큰
-        );
-
-        // Firebase로 인증 진행
-        final userCredential =
-            await FirebaseAuth.instance.signInWithCredential(credential);
-
-        // 로그인 시 사용자 이름 설정 (없는 경우 기본값 제공)
-        await userCredential.user?.updateProfile(
-            displayName:
-                kakaoUser.kakaoAccount?.profile?.nickname ?? "카카오 사용자");
-
-        // 사용자 정보 다시 로드하여 최신 상태 유지
-        await userCredential.user?.reload();
-
-        print('Firebase 인증 완료: ${userCredential.user?.uid}');
-
-        // 5. 성공 처리
-        onSuccess();
-        notifyListeners(); // 상태 변경 알림
-      } catch (authError) {
-        print('Firebase 인증 오류: $authError');
-        onError('카카오 계정으로 Firebase 인증 중 오류가 발생했습니다.');
-      }
-    } catch (e) {
-      print('카카오 로그인 오류: $e');
-
-      // 오류 유형에 따른 메시지 구분
-      if (e is kakao.KakaoAuthException) {
-        onError('카카오 인증 오류: ${e.message}');
-      } else if (e is FirebaseAuthException) {
-        switch (e.code) {
-          case 'account-exists-with-different-credential':
-            onError('이미 다른 방식으로 가입된 계정입니다. 다른 로그인 방법을 시도해보세요.');
-            break;
-          case 'invalid-credential':
-            onError('유효하지 않은 인증 정보입니다.');
-            break;
-          default:
-            onError('Firebase 인증 오류: ${e.message}');
-        }
-      } else {
-        onError('카카오 로그인 중 오류가 발생했습니다: ${e.toString()}');
-      }
-    }
+    // 여기에 카카오 로그인 로직을 구현하세요
   }
 }
