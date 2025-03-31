@@ -6,18 +6,24 @@ import 'package:flutter/material.dart';
 import 'package:eos_advance_login/screens/login_screen.dart';
 import 'package:eos_advance_login/theme/light_theme.dart';
 import 'package:eos_advance_login/theme/foundation/app_theme.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:kakao_flutter_sdk_user/kakao_flutter_sdk_user.dart' as kakao;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  await dotenv.load();
   // TODO: [과제 2-1] 카카오 SDK 초기화
   /*
    * 카카오 SDK 초기화 코드
    * - 카카오 개발자 콘솔에서 발급받은 네이티브 앱 키를 사용하여 초기화
    * - KakaoSdk.init(nativeAppKey: '네이티브_앱_키') 호출
    */
+  KakaoSdk.init(
+      nativeAppKey: dotenv.env['KAKAO_NATIVE_APP_KEY'] ?? '',
+      javaScriptAppKey: dotenv.env['KAKAO_JS_APP_KEY'] ?? '');
 
   // Firebase 초기화 수정
   try {
@@ -56,8 +62,8 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
         fontFamily: 'Pretendard', // 프리텐다드 폰트 기본 적용
       ),
-      home: StreamBuilder<User?>(
-        stream: FirebaseAuth.instance.authStateChanges(),
+      home: StreamBuilder<auth.User?>(
+        stream: auth.FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             // 인증 상태 확인 중일 때 로딩 표시

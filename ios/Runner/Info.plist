@@ -53,10 +53,16 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.145551522874-geud759k77diebb3t20p072i7iguou2m</string>
+				<string>kakaodfac0f7b9d5c6774acbab580c8c64575</string>
 			</array>
 		</dict>
 	</array>
 	<key>GIDClientID</key>
 	<string>145551522874-geud759k77diebb3t20p072i7iguou2m.apps.googleusercontent.com</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>kakaokompassauth</string>
+		<string>kakaolink</string>
+	</array>
 </dict>
 </plist>
