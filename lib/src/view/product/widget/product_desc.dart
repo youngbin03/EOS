@@ -18,7 +18,7 @@ class ProductDesc extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         children: [
-          /// Title
+          /// 제목과 평점을 표시하는 상단 행
           Row(
             children: [
               Expanded(
@@ -30,14 +30,14 @@ class ProductDesc extends StatelessWidget {
                 ),
               ),
 
-              /// Rating
+              /// 제품 평점 표시 컴포넌트
               Rating(rating: product.rating),
             ],
           ),
 
           const SizedBox(height: 24),
 
-          /// Content
+          /// 상품 설명 내용
           Text(
             product.desc.toString(),
             style: context.typo.headline6.copyWith(
