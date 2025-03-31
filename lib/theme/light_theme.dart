@@ -10,29 +10,29 @@ class LightTheme implements AppTheme {
 
   @override
   AppColor color = AppColor(
-    surface: Palette.white,
-    background: Palette.blue1.withAlpha(140), // 알파 값을 조절해 투명도 변경
+    surface: Palette.grey100,
+    background: Palette.black.withValues(alpha: 0.55),
     text: Palette.black,
-    subtext: Palette.darkGrey1,
-    toastContainer: Palette.black.withAlpha(217), // 알파 값을 조절해 투명도 변경
-    onToastContainer: Palette.lightGrey1,
-    hint: Palette.grey1,
-    hintContainer: Palette.lightGrey2,
-    onHintContainer: Palette.grey2,
-    inactive: Palette.blue2,
-    inactiveContainer: Palette.lightGrey1,
+    subtext: Palette.grey700,
+    toastContainer: Palette.black.withValues(alpha: 0.85),
+    onToastContainer: Palette.grey100,
+    hint: Palette.grey300,
+    hintContainer: Palette.grey150,
+    onHintContainer: Palette.grey500,
+    inactive: Palette.grey400,
+    inactiveContainer: Palette.grey250,
     onInactiveContainer: Palette.white,
-    primary: Palette.green, // 메인 컬러를 blue로 설정
+    primary: Palette.green,
     onPrimary: Palette.white,
-    secondary: Palette.subBlue,
+    secondary: Palette.red,
     onSecondary: Palette.white,
-    tertiary: Palette.red,
+    tertiary: Palette.yellow,
     onTertiary: Palette.white,
   );
 
   @override
   late AppTypo typo = AppTypo(
-    typo: const Pretendard(),
+    typo: const NotoSans(),
     fontColor: color.text,
   );
 
@@ -40,7 +40,7 @@ class LightTheme implements AppTheme {
   AppDeco deco = AppDeco(
     shadow: [
       BoxShadow(
-        color: Palette.black.withAlpha(26), // 알파 값을 조절해 투명도 변경
+        color: Palette.black.withValues(alpha: 0.1),
         blurRadius: 35,
       ),
     ],

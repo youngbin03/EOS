@@ -12,9 +12,7 @@ class AppTypo {
   /// Font Weight
   late FontWeight light = typo.light;
   late FontWeight regular = typo.regular;
-  late FontWeight medium = typo.medium;
   late FontWeight semiBold = typo.semiBold;
-  late FontWeight bold = typo.bold;
 
   /// Font Color
   final Color fontColor;
@@ -23,29 +21,29 @@ class AppTypo {
   late final TextStyle headline1 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.bold,
+    fontWeight: typo.regular,
     fontSize: 28,
     color: fontColor,
   );
   late final TextStyle headline2 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.semiBold,
+    fontWeight: typo.regular,
     fontSize: 24,
     color: fontColor,
   );
   late final TextStyle headline3 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.medium,
+    fontWeight: typo.regular,
     fontSize: 21,
     color: fontColor,
   );
   late final TextStyle headline4 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.semiBold,
-    fontSize: 18,
+    fontWeight: typo.regular,
+    fontSize: 20,
     color: fontColor,
   );
   late final TextStyle headline5 = TextStyle(
@@ -67,14 +65,14 @@ class AppTypo {
   late final TextStyle subtitle1 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.medium,
-    fontSize: 18,
+    fontWeight: typo.regular,
+    fontSize: 16,
     color: fontColor,
   );
   late final TextStyle subtitle2 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.medium,
+    fontWeight: typo.regular,
     fontSize: 15,
     color: fontColor,
   );
@@ -83,7 +81,7 @@ class AppTypo {
   late final TextStyle body1 = TextStyle(
     height: 1.3,
     fontFamily: typo.name,
-    fontWeight: typo.medium,
+    fontWeight: typo.regular,
     fontSize: 14,
     color: fontColor,
   );
@@ -94,8 +92,4 @@ class AppTypo {
     fontSize: 12,
     color: fontColor,
   );
-}
-
-extension AppTypoTheme on ThemeData {
-  AppTypo get appTypo => extension<AppTheme>()!.typo;
 }

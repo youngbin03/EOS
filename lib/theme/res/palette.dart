@@ -2,25 +2,28 @@ import 'package:flutter/material.dart';
 
 abstract class Palette {
   /// Chromatic color (유채색)
-  static Color blue1 = const Color(0xFFF5F7FF);
-  static Color blue2 = const Color(0xFFE6EBFF);
-  static Color blue3 = const Color(0xFFAAB9FF);
-  static Color subBlue = const Color(0xFF6F87FF);
-  static Color cherryGreen = const Color(0xFFC4E464);
-  static Color green = const Color(0xFFA8C551);
+  static Color green = const Color(0xFF5AC463);
+  static Color red = const Color(0xFFFB432F);
+  static Color yellow = const Color(0xFFFEC85B);
 
-  /// Accent colors
-  static Color red = const Color(0xFFF25555);
-  static Color yellow = const Color(0xFFFFD833);
-
-  /// Greyscale
+  /// Achromatic color (무채색)
   static Color white = const Color(0xFFFFFFFF);
-  static Color bluegrey = const Color(0xFF202632);
-  static Color lightGrey1 = const Color(0xFFF5F5F5);
-  static Color lightGrey2 = const Color(0xFFDBDCDC);
-  static Color grey1 = const Color(0xFFB5B7BA);
-  static Color grey2 = const Color(0xFF909398);
-  static Color darkGrey1 = const Color(0xFF5C5F66);
-  static Color darkGrey2 = const Color(0xFF292C34);
+  static Color grey100 = const Color(0xFFFAFAFA);
+  static Color grey150 = const Color(0xFFF5F5F5);
+  static Color grey200 = const Color(0xFFEFEFEF);
+  static Color grey250 = const Color(0xFFE8E8E8);
+  static Color grey300 = const Color(0xFFDFDFDF);
+  static Color grey350 = const Color(0xFFC8C8C8);
+  static Color grey400 = const Color(0xFFB7B7B7);
+  static Color grey500 = const Color(0xFF949494);
+  static Color grey600 = const Color(0xFF777777);
+  static Color grey650 = const Color(0xFF616161);
+  static Color grey700 = const Color(0xFF555555);
+  static Color grey750 = const Color(0xFF3E3E3E);
+  static Color grey770 = const Color(0xFF383838);
+  static Color grey800 = const Color(0xFF2A2A2A);
+  static Color grey850 = const Color(0xFF1F1F1F);
+  static Color grey870 = const Color(0xFF1A1A1A);
+  static Color grey900 = const Color(0xFF111111);
   static Color black = const Color(0xFF000000);
 }
