@@ -4,7 +4,20 @@ import 'package:house_of_tomorrow/src/model/lang.dart';
 import 'package:house_of_tomorrow/src/model/product.dart';
 import 'package:house_of_tomorrow/src/model/product_color.dart';
 
+/// 테스트용 더미 데이터 클래스
+///
+/// 테스트 환경에서 일관된 데이터를 제공하기 위한 정적 클래스입니다.
+/// 실제 API 호출 없이 테스트를 수행할 수 있도록 미리 정의된 데이터를 제공합니다.
+///
+/// 테스트 더미 데이터의 장점:
+/// 1. 테스트 실행 속도 향상 (네트워크 호출 불필요)
+/// 2. 테스트 결과의 일관성 보장
+/// 3. 외부 의존성 제거로 안정적인 테스트 환경 구축
 abstract class Dummy {
+  /// 테스트용 상품 객체
+  ///
+  /// Product 모델의 모든 필드를 포함한 완전한 테스트 데이터입니다.
+  /// 다국어 지원(한국어/영어), 가격, 평점, 색상 옵션 등을 포함합니다.
   static const Product product = Product(
     name: Lang(
       ko: "3인용 섹션",
@@ -35,6 +48,16 @@ abstract class Dummy {
     ],
   );
 
+  /// JSON 형태의 상품 목록 데이터
+  ///
+  /// API 응답을 시뮬레이션하기 위한 JSON 문자열입니다.
+  /// ProductRepository의 네트워크 통신 테스트에서 사용됩니다.
+  ///
+  /// 포함 내용:
+  /// - 2개의 상품 데이터 (소파 제품들)
+  /// - 각 상품의 다국어 정보
+  /// - 색상 옵션과 이미지 URL
+  /// - 가격 및 평점 정보
   static const String jsonProductList = '''[
     {
       "name": {
@@ -93,10 +116,14 @@ abstract class Dummy {
   ]
   ''';
 
+  /// 테스트용 장바구니 아이템
+  ///
+  /// CartService의 기능 테스트에 사용되는 기본 장바구니 아이템입니다.
+  /// 상품, 색상 인덱스, 수량, 선택 상태 등의 정보를 포함합니다.
   static const CartItem cartItem = CartItem(
     product: product,
-    colorIndex: 0,
-    count: 1,
-    isSelected: true,
+    colorIndex: 0, // 첫 번째 색상 선택
+    count: 1, // 기본 수량 1개
+    isSelected: true, // 선택된 상태
   );
 }

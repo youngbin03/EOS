@@ -11,13 +11,12 @@ class ProductColorPreview extends StatelessWidget {
     required this.product,
   });
 
-  final int colorIndex; // 현재 선택된 색상 인덱스
-  final Product product; // 제품 정보 객체
+  final int colorIndex;
+  final Product product;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // 테마 시스템을 활용한 스타일링 (context.color, context.deco)
       decoration: BoxDecoration(
         color: context.color.surface,
         borderRadius: BorderRadius.circular(24),
@@ -28,15 +27,12 @@ class ProductColorPreview extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          /// 이미지 로딩 최적화
-          /// - CachedNetworkImage: 네트워크 이미지 캐싱으로 성능 향상
-          /// - AspectRatio: 일관된 비율 유지 (1:0.8)
+          /// Image
           AspectRatio(
             aspectRatio: 1 / 0.8,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: CachedNetworkImage(
-                // colorIndex를 사용하여 선택된 색상의 이미지 표시
                 imageUrl: product.productColorList[colorIndex].imageUrl,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -46,7 +42,7 @@ class ProductColorPreview extends StatelessWidget {
 
           const SizedBox(height: 16),
 
-          /// 제품명 - 굵은 폰트 적용
+          /// Name
           Text(
             product.name.toString(),
             style: context.typo.headline1.copyWith(
@@ -56,7 +52,7 @@ class ProductColorPreview extends StatelessWidget {
           const SizedBox(height: 4),
           Row(
             children: [
-              /// 브랜드명 - 연한 색상으로 표시
+              /// Brand
               Text(
                 product.brand.toString(),
                 style: context.typo.subtitle1.copyWith(
@@ -67,7 +63,7 @@ class ProductColorPreview extends StatelessWidget {
 
               const Spacer(),
 
-              /// 가격 표시 - 국제화 처리 (IntlHelper 활용)
+              /// Price
               Text(
                 IntlHelper.currency(
                   symbol: product.priceUnit,

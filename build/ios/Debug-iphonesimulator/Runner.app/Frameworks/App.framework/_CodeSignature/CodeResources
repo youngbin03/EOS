@@ -22,7 +22,7 @@
 		</data>
 		<key>flutter_assets/NOTICES.Z</key>
 		<data>
-		NiAdyiE7pI+uDDLhycuzJmziLEs=
+		eHsxIt08UuG5RrjnpwX2k/U0WNk=
 		</data>
 		<key>flutter_assets/NativeAssetsManifest.json</key>
 		<data>
@@ -102,11 +102,11 @@
 		</data>
 		<key>flutter_assets/isolate_snapshot_data</key>
 		<data>
-		w9WcwIYVRl07EMLuLi7qukruhIs=
+		lKuH9ddHfuQ0gay79iWXgmH3gCo=
 		</data>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<data>
-		QpdMzgXv2nipD/y/IW1DfaO3KSE=
+		z9xoP9SzMq/S4MCYj6bwtVg+5h0=
 		</data>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
 		<data>
@@ -114,11 +114,11 @@
 		</data>
 		<key>flutter_assets/shaders/ink_sparkle.frag</key>
 		<data>
-		VvTF10G1gIeea4aI0DhJjCjHgXQ=
+		p79zzJ85/yOQo5OGiBW5XF0+CxY=
 		</data>
 		<key>flutter_assets/vm_snapshot_data</key>
 		<data>
-		SoHnDHqzNKozN7o/zhsvOoXVErY=
+		5pZuXudFN+/X6GBnZRBE8DbuhuQ=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -148,7 +148,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			emgF5DCQXsSKu/VeI9jNJObuqY4DdIMBnhBhXUld2tA=
+			0NuOgUpdc4AfDJXjRAt8ynIGjzIfDK3Uoa4k1hqtVYY=
 			</data>
 		</dict>
 		<key>flutter_assets/NativeAssetsManifest.json</key>
@@ -288,14 +288,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			PBOAqqWi5ujK3/k/uWcKrZyOam5QktQ5MqxZKes8MBY=
+			0HgzM7ffFWRkpC0Cac4XAGW8JBmGpYBYFYO5Oqv45xU=
 			</data>
 		</dict>
 		<key>flutter_assets/kernel_blob.bin</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			U2hnS4te06EK1W6STur5y4lEoPhtl8lA67iJpE3uRhU=
+			BJH+72Wb+lj3KRnIriHm3l2QGoR6M/R/eDuYg3I9Phk=
 			</data>
 		</dict>
 		<key>flutter_assets/packages/cupertino_icons/assets/CupertinoIcons.ttf</key>
@@ -309,14 +309,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			TGVjYgE+Oyl6guvhhPPrWfynkxkJeFjSzSLsQqn7Q3M=
+			ggsttSoN6c2kH04/7vNnFwBQTTy8j9ILVF4lU1822Bk=
 			</data>
 		</dict>
 		<key>flutter_assets/vm_snapshot_data</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			RTqty/gYjcrXxgR3QLjNukvL8gGpfV6MdaYktQJaIa8=
+			OKT7zSYjvmy6bkUt/xrnwXxv1rygk4kGDCZd1F+nKug=
 			</data>
 		</dict>
 	</dict>

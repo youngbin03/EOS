@@ -17,16 +17,14 @@ class ProductViewModel extends BaseViewModel {
   final Product product;
 
   /// 선택한 수량
-  int _count = 1;
-
-  int get count => _count;
+  int count = 1;
 
   /// 선택한 색상
   int colorIndex = 0;
 
   /// 수량 업데이트 이벤트 함수
   void onCountChanged(int newCount) {
-    _count = newCount;
+    count = newCount;
     notifyListeners();
   }
 

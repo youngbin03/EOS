@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 
-class BaseViewModel extends ChangeNotifier {
+class BaseViewModel with ChangeNotifier {
   bool _isBusy = false;
 
   bool get isBusy => _isBusy;
 
   set isBusy(bool isBusy) {
-    if (_isBusy != isBusy) {
-      _isBusy = isBusy;
-      notifyListeners();
-    }
+    if (_isBusy == isBusy) return;
+    _isBusy = isBusy;
+    notifyListeners();
   }
 }

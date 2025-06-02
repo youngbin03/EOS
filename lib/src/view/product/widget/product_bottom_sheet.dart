@@ -17,21 +17,17 @@ class ProductBottomSheet extends StatelessWidget {
     required this.onAddToCartPressed,
   });
 
-  // 부모 위젯으로부터 전달받은 속성들
-  final int count; // 현재 선택된 수량
-  final Product product; // 표시할 제품 정보
-  final void Function(int count) onCountChanged; // 수량 변경 콜백 함수
-  final void Function() onAddToCartPressed; // 장바구니 추가 콜백 함수
+  final int count;
+  final Product product;
+  final void Function(int count) onCountChanged;
+  final void Function() onAddToCartPressed;
 
   @override
   Widget build(BuildContext context) {
     return BaseBottomSheet(
-      // 데스크톱 모드에서는 모든 모서리를 둥글게, 모바일에서는 상단만 둥글게 처리
       isRoundAll: context.layout(false, desktop: true),
-
-      // 기기 유형에 따라 다른 패딩 적용 (반응형 처리)
       padding: EdgeInsets.only(
-        top: context.layout(32, desktop: 16), // 모바일 32, 데스크톱 16
+        top: context.layout(32, desktop: 16),
         bottom: 16,
         left: 16,
         right: 16,
@@ -39,7 +35,6 @@ class ProductBottomSheet extends StatelessWidget {
       child: Wrap(
         runSpacing: 16,
         children: [
-          // 수량 선택 영역
           Row(
             children: [
               Text(
@@ -48,15 +43,14 @@ class ProductBottomSheet extends StatelessWidget {
               ),
               const Spacer(),
 
-              /// 수량 조절 버튼 (사용자 상호작용 처리)
+              /// CounterButton
               CounterButton(
                 count: count,
-                onChanged: onCountChanged, // 부모 위젯의 콜백 함수 전달
+                onChanged: onCountChanged,
               ),
             ],
           ),
 
-          // 가격 표시 영역
           Row(
             children: [
               Text(
@@ -65,11 +59,11 @@ class ProductBottomSheet extends StatelessWidget {
               ),
               const Spacer(),
 
-              /// 총 금액 계산 및 표시 (국제화 처리)
+              /// 금액
               Text(
                 IntlHelper.currency(
                   symbol: product.priceUnit,
-                  number: product.price * count, // 단가 × 수량 계산
+                  number: product.price * count,
                 ),
                 style: context.typo.headline3.copyWith(
                   color: context.color.primary,
@@ -78,12 +72,12 @@ class ProductBottomSheet extends StatelessWidget {
             ],
           ),
 
-          /// 장바구니 추가 버튼
+          /// 카트에 담기
           Button(
             width: double.infinity,
             size: ButtonSize.large,
             text: S.current.addToCart,
-            onPressed: onAddToCartPressed, // 부모 위젯의 콜백 함수 전달
+            onPressed: onAddToCartPressed,
           ),
         ],
       ),
