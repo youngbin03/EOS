@@ -40,7 +40,15 @@ jobs:
     
     # 코드 포맷 검사
     - name: 🎨 Check formatting
-      run: dart format --output=none --set-exit-if-changed .
+      run: |
+        # 모든 파일을 먼저 포맷팅 (자동 생성 파일 포함)
+        dart format .
+        # Git 상태 확인 (수동 작성 파일만 체크)
+        if ! git diff --quiet --exit-code lib/src/ test/src/ lib/main.dart lib/theme/; then
+          echo "코드 포맷팅이 필요합니다. 'dart format .'을 실행하세요."
+          git diff
+          exit 1
+        fi
     
     # 정적 분석 (린트)
     - name: 🔍 Analyze code
