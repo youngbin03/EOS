@@ -24,6 +24,58 @@ linter:
   rules:
     # avoid_print: false  # Uncomment to disable the `avoid_print` rule
     # prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
+    # 코드 스타일
+    prefer_const_constructors: true
+    prefer_const_literals_to_create_immutables: true
+    prefer_const_declarations: true
+    prefer_final_fields: true
+    prefer_final_locals: true
+    
+    # 성능 관련
+    avoid_function_literals_in_foreach_calls: true
+    prefer_for_elements_to_map_fromIterable: true
+    prefer_spread_collections: true
+    
+    # 가독성
+    always_declare_return_types: true
+    always_put_required_named_parameters_first: true
+    avoid_empty_else: true
+    avoid_unnecessary_containers: true
+    prefer_is_empty: true
+    prefer_is_not_empty: true
+    
+    # 에러 방지
+    avoid_print: true
+    avoid_returning_null_for_void: true
+    cancel_subscriptions: true
+    close_sinks: true
+    
+    # 문서화
+    public_member_api_docs: false  # 필요에 따라 true로 변경
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
+
+# 분석에서 제외할 파일들
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.mocks.dart"
+    - "**/generated_plugin_registrant.dart"
+    - "build/**"
+    - ".dart_tool/**"
+  
+  # 강한 모드 활성화
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+  
+  # 에러 처리 설정
+  errors:
+    # 경고를 에러로 처리하지 않음
+    invalid_annotation_target: ignore
+    # 사용하지 않는 import는 경고로 처리
+    unused_import: warning
+    # 사용하지 않는 로컬 변수는 정보로 처리
+    unused_local_variable: info
