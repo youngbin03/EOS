@@ -4,7 +4,7 @@ name: Flutter CI/CD
 on:
   # Pull Request가 생성되거나 업데이트될 때
   pull_request:
-    branches: [ main, develop, week9-solution ]  # week9-solution 브랜치 추가
+    branches: [ main, week9-solution ]  # week9-solution 브랜치 추가
   # 브랜치에 push될 때
   push:
     branches: [ main, week9-solution ]  # week9-solution 브랜치 추가
