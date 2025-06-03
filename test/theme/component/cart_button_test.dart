@@ -97,6 +97,6 @@ void main() {
         find.byType(CartButton),
         matchesGoldenFile('cart_button_golden_test.png'),
       );
-    });
+    }, tags: ['golden']);
   });
 }
